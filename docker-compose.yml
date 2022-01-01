@@ -1,5 +1,7 @@
 version: "3.8" # docker-composeのバージョンを指定 https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/
 
+networks:
+  network8015:
 services: 
   php: # サービス名
     container_name: "container-php" # コンテナ名:任意項目
@@ -8,3 +10,31 @@ services:
       - '8015:80' # ブラウザからのアクセス情報を設定。複数環境を立てる際に競合を避ける
     volumes:
       - ./php:/var/www/html # データを永続化したいときは、コンテナの外にデータを置く
+    networks:
+      - network8015
+  mysql:
+    container_name: "container-mysql" # コンテナ名
+    image: mysql:5.7
+    volumes:                          # ここでマウントしておかないと、dockerを起動する度にデータが消えてしまう。
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=test_database
+      - MYSQL_USER=username
+      - MYSQL_PASSWORD=password
+    networks:
+      - network8015
+  phpmyadmin:
+    container_name: "container-phpmyadmin" # コンテナ名
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=username
+      - PMA_PASSWORD=password
+    links:
+      - mysql
+    ports:
+      - 9015:80
+    networks:
+      - network8015
