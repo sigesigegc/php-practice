@@ -1,0 +1,10 @@
+version: "3.8" # docker-composeのバージョンを指定 https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/
+
+services: 
+  php: # サービス名
+    container_name: "container-php" # コンテナ名:任意項目
+    build: ./
+    ports:
+      - '8015:80' # ブラウザからのアクセス情報を設定。複数環境を立てる際に競合を避ける
+    volumes:
+      - ./php:/var/www/html # データを永続化したいときは、コンテナの外にデータを置く
