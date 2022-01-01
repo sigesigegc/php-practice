@@ -8,9 +8,10 @@
 </head>
 
 <body>
-    <h1><?php echo "Docker環境構築"; ?></h1>
+    <h1>ユーザー登録フォーム:結果</h1>
     <?php
-    include('./src/user-get.php');
+    include('./src/user-post.php');
+    include('./src/user-get-to-table.php');
     ?>
 
 </body>
